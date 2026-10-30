@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#080b16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Emberdeep is a pocket-sized roguelike dungeon crawler. Choose a delver, explore five cursed floors, and wake the Emberheart.">
+  <title>Emberdeep — A Pocket Dungeon Crawl</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="ambient" aria-hidden="true"></canvas>
+  <div class="screen-grain" aria-hidden="true"></div>
+  <div class="screen-vignette" aria-hidden="true"></div>
+
+  <div id="app">
+    <section id="title-screen" class="screen screen--title is-active" aria-label="Emberdeep title screen">
+      <div class="title-nav">
+        <div class="brand-mark" aria-hidden="true">
+          <span class="brand-mark__line"></span>
+          <span class="brand-mark__gem"></span>
+          <span class="brand-mark__line"></span>
+        </div>
+        <button class="round-btn" id="btn-help-title" aria-label="How to play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.5v.2M9.6 9.1a2.5 2.5 0 1 1 3.7 2.2c-.9.5-1.3 1-1.3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".55"/></svg>
+        </button>
+      </div>
+
+      <div class="title-hero">
+        <div class="emblem" aria-hidden="true">
+          <div class="emblem__halo"></div>
+          <svg class="emblem__svg" viewBox="0 0 220 220">
+            <defs>
+              <radialGradient id="gemGlow" cx="50%" cy="38%" r="65%">
+                <stop offset="0%" stop-color="#fff7d6"/>
+                <stop offset="28%" stop-color="#ffd166"/>
+                <stop offset="65%" stop-color="#f4864b"/>
+                <stop offset="100%" stop-color="#8f2d45"/>
+              </radialGradient>
+              <linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffe9a6"/>
+                <stop offset="48%" stop-color="#c88a36"/>
+                <stop offset="100%" stop-color="#6e4521"/>
+              </linearGradient>
+              <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="110" cy="110" r="88" fill="none" stroke="url(#ringGold)" stroke-width="1.4" opacity=".55" stroke-dasharray="2 7"/>
+            <circle cx="110" cy="110" r="72" fill="none" stroke="url(#ringGold)" stroke-width=".8" opacity=".35"/>
+            <g fill="none" stroke="url(#ringGold)" stroke-width="1.2" opacity=".7">
+              <path d="M110 18v22M110 180v22M18 110h22M180 110h22"/>
+              <path d="M45 45l14 14M161 161l14 14M175 45l-14 14M59 161l-14 14"/>
+            </g>
+            <g filter="url(#softGlow)">
+              <path d="M110 56l33 33-33 75-33-75z" fill="url(#gemGlow)"/>
+              <path d="M110 56l33 33-33 13-33-13z" fill="#fff3bd" opacity=".48"/>
+              <path d="M110 102v62l33-75z" fill="#7d2342" opacity=".38"/>
+            </g>
+            <path d="M110 45v14M110 161v14" stroke="#ffe9a6" stroke-width="1.2" opacity=".8"/>
+          </svg>
+          <span class="emblem__orbit emblem__orbit--one"></span>
+          <span class="emblem__orbit emblem__orbit--two"></span>
+        </div>
+
+        <p class="eyebrow"><span></span>A pocket dungeon crawl<span></span></p>
+        <h1 class="game-title">EMBER<span>DEEP</span></h1>
+        <p class="tagline">Every step wakes something older.</p>
+
+        <div class="title-actions">
+          <button id="btn-start" class="btn btn--primary btn--wide">
+            <span>Begin the Descent</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button id="btn-how" class="btn btn--ghost">How to play</button>
+        </div>
+
+        <div class="best-run" id="best-run" hidden>
+          <span class="best-run__label">Deepest descent</span>
+          <strong id="best-run-text">Floor 1</strong>
+        </div>
+      </div>
+
+      <div class="title-footer">
+        <span class="control-hint"><i></i>Tap, swipe, or tilt</span>
+        <span class="version">Five floors await</span>
+      </div>
+    </section>
+
+    <section id="class-screen" class="screen screen--class" aria-label="Choose your delver">
+      <div class="class-top">
+        <button class="round-btn" id="btn-class-back" aria-label="Back to title">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="class-heading">
+          <p class="eyebrow"><span></span>Choose your delver<span></span></p>
+          <h2>Who enters the deep?</h2>
+          <p>Each delver carries a different answer to the dark.</p>
+        </div>
+        <button class="round-btn" id="btn-help-class" aria-label="How to play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.5v.2M9.6 9.1a2.5 2.5 0 1 1 3.7 2.2c-.9.5-1.3 1-1.3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".55"/></svg>
+        </button>
+      </div>
+
+      <div class="class-grid" id="class-grid" role="list">
+        <button class="class-card class-card--knight" data-class="knight" role="listitem" aria-label="Choose the Knight">
+          <span class="class-card__shine"></span>
+          <span class="class-card__art">
+            <canvas class="class-portrait" width="240" height="240" data-portrait="knight" aria-hidden="true"></canvas>
+          </span>
+          <span class="class-card__role">Bulwark</span>
+          <span class="class-card__name">The Knight</span>
+          <span class="class-card__desc">A stubborn shield between the dark and the light.</span>
+          <span class="class-card__stats">
+            <span><b>68</b> HP</span><span><b>10</b> ATK</span><span><b>4</b> DEF</span>
+          </span>
+          <span class="class-card__skill"><em>Shield Bash</em> — stagger every foe beside you.</span>
+          <span class="class-card__cta">Choose Knight</span>
+        </button>
+
+        <button class="class-card class-card--ranger" data-class="ranger" role="listitem" aria-label="Choose the Ranger">
+          <span class="class-card__shine"></span>
+          <span class="class-card__art">
+            <canvas class="class-portrait" width="240" height="240" data-portrait="ranger" aria-hidden="true"></canvas>
+          </span>
+          <span class="class-card__role">Deadeye</span>
+          <span class="class-card__name">The Ranger</span>
+          <span class="class-card__desc">Quick feet, quicker arrows, and a habit of surviving.</span>
+          <span class="class-card__stats">
+            <span><b>54</b> HP</span><span><b>11</b> ATK</span><span><b>2</b> DEF</span>
+          </span>
+          <span class="class-card__skill"><em>Rain of Arrows</em> — loose a volley at every visible foe.</span>
+          <span class="class-card__cta">Choose Ranger</span>
+        </button>
+
+        <button class="class-card class-card--mage" data-class="mage" role="listitem" aria-label="Choose the Mage">
+          <span class="class-card__shine"></span>
+          <span class="class-card__art">
+            <canvas class="class-portrait" width="240" height="240" data-portrait="mage" aria-hidden="true"></canvas>
+          </span>
+          <span class="class-card__role">Emberwright</span>
+          <span class="class-card__name">The Mage</span>
+          <span class="class-card__desc">Borrows fire from older things. Usually gives it back.</span>
+          <span class="class-card__stats">
+            <span><b>46</b> HP</span><span><b>13</b> ATK</span><span><b>1</b> DEF</span>
+          </span>
+          <span class="class-card__skill"><em>Arcane Nova</em> — scorch everything within three tiles.</span>
+          <span class="class-card__cta">Choose Mage</span>
+        </button>
+      </div>
+
+      <div class="class-footer">
+        <span>Difficulty rises with every floor</span>
+        <span class="class-footer__rune" aria-hidden="true"></span>
+        <span>One life. One run.</span>
+      </div>
+    </section>
+
+    <main id="game-screen" class="screen screen--game" aria-label="Dungeon">
+      <header class="hud">
+        <div class="hud__left">
+          <div class="floor-chip">
+            <span class="floor-chip__label">Floor</span>
+            <strong id="hud-floor">1</strong>
+            <span class="floor-chip__of">/ 5</span>
+          </div>
+          <div class="resource-chip" aria-label="Gold">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".65"/><path d="M12 6.5v11" stroke="currentColor" stroke-width="1" opacity=".4"/></svg>
+            <strong id="hud-gold">0</strong>
+          </div>
+          <div class="resource-chip resource-chip--sigil" aria-label="Ember sigil">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l6 6-6 12-6-12z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 9h12M12 3v18" stroke="currentColor" stroke-width=".8" opacity=".5"/></svg>
+            <strong id="hud-sigil">0</strong>
+          </div>
+        </div>
+
+        <div class="hero-hud">
+          <div class="hero-avatar" id="hud-avatar" aria-hidden="true"></div>
+          <div class="hero-hud__meta">
+            <div class="hero-hud__row">
+              <strong id="hud-name">Delver</strong>
+              <span class="level-pill">Lv <b id="hud-level">1</b></span>
+              <span class="hp-numbers"><b id="hud-hp">68</b>/<span id="hud-maxhp">68</span></span>
+            </div>
+            <div class="bar bar--hp"><span id="hud-hp-bar"></span><i class="bar__glint"></i></div>
+            <div class="bar bar--xp"><span id="hud-xp-bar"></span></div>
+          </div>
+        </div>
+
+        <div class="hud__right">
+          <button class="round-btn round-btn--small" id="btn-sound" aria-label="Toggle sound">
+            <svg class="icon-sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h3l4-3v12l-4-3H5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <svg class="icon-sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h3l4-3v12l-4-3H5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 10l4 4M20 10l-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </button>
+          <button class="round-btn round-btn--small" id="btn-pause" aria-label="Pause game">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7v10M15 7v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="board-shell">
+        <div class="board-frame" id="board-frame">
+          <canvas id="dungeon" role="img" aria-label="Dungeon map. Tap an adjacent tile to move or attack."></canvas>
+          <div class="board-shade" aria-hidden="true"></div>
+          <div class="board-corner board-corner--tl" aria-hidden="true"></div>
+          <div class="board-corner board-corner--tr" aria-hidden="true"></div>
+          <div class="board-corner board-corner--bl" aria-hidden="true"></div>
+          <div class="board-corner board-corner--br" aria-hidden="true"></div>
+
+          <div class="toast" id="toast" role="status" aria-live="polite">
+            <span class="toast__icon" id="toast-icon"></span>
+            <span id="toast-text"></span>
+          </div>
+
+          <div class="floor-banner" id="floor-banner" aria-hidden="true">
+            <span class="floor-banner__kicker" id="floor-banner-kicker">Floor I</span>
+            <strong id="floor-banner-title">The Mossy Crypt</strong>
+            <span class="floor-banner__sub" id="floor-banner-sub">Find the Ember Sigil</span>
+          </div>
+
+          <div class="tilt-pill" id="tilt-pill" hidden>
+            <span class="tilt-pill__dot"></span>Tilt controls
+          </div>
+
+          <div class="boss-hud" id="boss-hud" hidden>
+            <div class="boss-hud__top"><span id="boss-name">The Ember Warden</span><em>Warden of the deep</em></div>
+            <div class="bar bar--boss"><span id="boss-bar"></span></div>
+          </div>
+
+          <div class="tap-hint" id="tap-hint">
+            <span class="tap-hint__pulse"></span>
+            <span>Tap a nearby tile to move</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="action-bar">
+          <button class="action-btn" id="btn-potion" aria-label="Drink a healing potion">
+            <span class="action-btn__icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v5l-4 7a3.2 3.2 0 0 0 2.8 4.8h6.4A3.2 3.2 0 0 0 18 15l-4-7V3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.5 14.5h9" stroke="currentColor" stroke-width="1.2" opacity=".6"/></svg>
+            </span>
+            <span class="action-btn__text"><em>Potion</em><small id="potion-count">×2</small></span>
+            <span class="action-btn__badge" id="potion-badge">2</span>
+          </button>
+
+          <button class="action-btn action-btn--skill" id="btn-skill" aria-label="Use class skill">
+            <span class="action-btn__icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="11" r="2" fill="currentColor" opacity=".8"/></svg>
+            </span>
+            <span class="action-btn__text"><em id="skill-name">Shield Bash</em><small id="skill-state">Ready</small></span>
+            <span class="action-btn__badge" id="skill-badge" hidden>4</span>
+          </button>
+
+          <button class="action-btn action-btn--wait" id="btn-wait" aria-label="Wait one turn">
+            <span class="action-btn__icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 4 8 4 8 8s-8 4-8 8M16 3c0 4-8 4-8 8s8 4 8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="action-btn__text"><em>Wait</em><small>Pass turn</small></span>
+          </button>
+        </div>
+
+        <div class="dpad" role="group" aria-label="Movement controls">
+          <button class="dpad__btn dpad__btn--up" data-move="up" aria-label="Move up">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="dpad__btn dpad__btn--left" data-move="left" aria-label="Move left">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="dpad__core" aria-hidden="true">
+            <span class="dpad__gem"></span>
+          </div>
+          <button class="dpad__btn dpad__btn--right" data-move="right" aria-label="Move right">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="dpad__btn dpad__btn--down" data-move="down" aria-label="Move down">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="event-ticker" id="event-ticker">
+        <span class="event-ticker__mark" aria-hidden="true"></span>
+        <span id="event-text">The dark is listening.</span>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-layer" id="modal-layer" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+
+    <section class="modal" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+      <button class="modal__close round-btn" data-close-modal aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <p class="eyebrow"><span></span>The delver's primer<span></span></p>
+      <h2 id="help-title">How to survive</h2>
+      <div class="help-grid">
+        <div class="help-item">
+          <span class="help-item__num">01</span>
+          <div><strong>Explore</strong><p>Tap a nearby tile, swipe the board, use the rune pad, or tilt your device. Fog lifts as you move.</p></div>
+        </div>
+        <div class="help-item">
+          <span class="help-item__num">02</span>
+          <div><strong>Fight</strong><p>Step into a foe to strike. Every action gives the dungeon a turn. Use potions and your class skill wisely.</p></div>
+        </div>
+        <div class="help-item">
+          <span class="help-item__num">03</span>
+          <div><strong>Descend</strong><p>Claim the Ember Sigil on each floor to unseal the stairwell. Reach floor five and defeat the Ember Warden.</p></div>
+        </div>
+        <div class="help-item">
+          <span class="help-item__num">04</span>
+          <div><strong>Grow</strong><p>Gold, chests, and fallen foes make you stronger. Leveling restores health. There is no second life.</p></div>
+        </div>
+      </div>
+      <div class="help-keys">
+        <span><kbd>WASD</kbd> / <kbd>Arrows</kbd> move</span>
+        <span><kbd>Q</kbd> potion</span>
+        <span><kbd>E</kbd> skill</span>
+        <span><kbd>Space</kbd> wait</span>
+        <span><kbd>Esc</kbd> pause</span>
+      </div>
+      <button class="btn btn--primary btn--wide" data-close-modal>Back to the dark</button>
+    </section>
+
+    <section class="modal" id="modal-settings" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <button class="modal__close round-btn" data-close-modal aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <p class="eyebrow"><span></span>Preferences<span></span></p>
+      <h2 id="settings-title">Tune the descent</h2>
+      <div class="setting-row">
+        <div><strong>Sound</strong><p>Arcane hums, impacts, and coin chimes.</p></div>
+        <button class="switch" id="toggle-sound" role="switch" aria-checked="true" aria-label="Sound"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Tilt to move</strong><p id="tilt-help">Tilt your device to step through the dungeon.</p></div>
+        <button class="switch" id="toggle-tilt" role="switch" aria-checked="false" aria-label="Tilt to move"><span></span></button>
+      </div>
+      <div class="tilt-actions">
+        <button class="btn btn--ghost btn--small" id="btn-calibrate" disabled>Calibrate tilt</button>
+        <span id="tilt-status">Motion access has not been requested.</span>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="setting-row setting-row--plain">
+        <div><strong>Controls</strong><p>Tap tiles, swipe, use the rune pad, or keyboard.</p></div>
+        <span class="setting-badge">Always on</span>
+      </div>
+      <button class="btn btn--primary btn--wide" data-close-modal>Done</button>
+    </section>
+
+    <section class="modal" id="modal-pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <p class="eyebrow"><span></span>Held breath<span></span></p>
+      <h2 id="pause-title">The dungeon waits</h2>
+      <p class="modal__lead">Take a moment. It has nowhere else to be.</p>
+      <div class="modal-actions">
+        <button class="btn btn--primary btn--wide" id="btn-resume">Resume descent</button>
+        <button class="btn btn--ghost btn--wide" id="btn-pause-help">How to play</button>
+        <button class="btn btn--ghost btn--wide" id="btn-pause-settings">Settings</button>
+        <button class="btn btn--danger btn--wide" id="btn-abandon">Abandon run</button>
+      </div>
+    </section>
+
+    <section class="modal modal--result" id="modal-result" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+      <div class="result-emblem" id="result-emblem" aria-hidden="true">
+        <span></span>
+      </div>
+      <p class="eyebrow" id="result-kicker"><span></span>The deep keeps you<span></span></p>
+      <h2 id="result-title">Taken by the dark</h2>
+      <p class="modal__lead" id="result-lead">Your ember gutters out on the cold stone.</p>
+      <div class="result-stats">
+        <div><span>Floor</span><strong id="result-floor">1</strong></div>
+        <div><span>Level</span><strong id="result-level">1</strong></div>
+        <div><span>Gold</span><strong id="result-gold">0</strong></div>
+        <div><span>Foes</span><strong id="result-kills">0</strong></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn--primary btn--wide" id="btn-again">Descend again</button>
+        <button class="btn btn--ghost btn--wide" id="btn-result-title">Return to title</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="sr-only" id="live-region" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p style="padding:2rem;color:#fff;font-family:sans-serif">Emberdeep needs JavaScript to wake the dungeon.</p></noscript>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
