@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#07060c">
+  <meta name="description" content="Gate of Embers — a Hades-style room-clearing roguelite for phone, tablet, and desktop.">
+  <title>Gate of Embers</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23110d0c'/%3E%3Cpath d='M32 8c6 10-4 14 2 22 5-4 6-10 6-10 8 10 10 20 2 28-7 7-20 6-25-3-4-8 0-17 7-23-1 8 3 10 5 7 3-4-4-11 3-21z' fill='%23f2b45c'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-blade" viewBox="0 0 64 64">
+      <path d="M47 8 27 33l-4 10 10-4L58 19c2-2 2-5 0-7l-4-4c-2-2-5-2-7 0Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="m27 33-8 8m-6 6 6-6m-9 15 6-6m-4 10 8-8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="m12 52 6-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-bow" viewBox="0 0 64 64">
+      <path d="M18 8c20 4 32 17 34 38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="M18 8 52 46" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="m47 11 4 7-8-1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="m31 26 5 5m-10 2 4 4m-8 1 3 3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="m14 36 22 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 64 64">
+      <path d="M32 6 53 13v16c0 14-8 24-21 30C19 53 11 43 11 29V13L32 6Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M32 16v28M21 24h22M24 36h16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="32" cy="27" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    </symbol>
+    <symbol id="icon-heart" viewBox="0 0 64 64">
+      <path d="M32 54S8 40 8 23a13 13 0 0 1 24-7 13 13 0 0 1 24 7c0 17-24 31-24 31Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-bolt" viewBox="0 0 64 64">
+      <path d="M35 5 15 36h14l-4 23 24-34H34l1-20Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-feather" viewBox="0 0 64 64">
+      <path d="M50 8c-18 1-32 12-34 32l-3 16 14-5C47 47 55 28 50 8Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M20 44 46 16M28 38l8 2m-2-10 8 2m-2-10 7 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-fang" viewBox="0 0 64 64">
+      <path d="M13 12c9 4 16 12 19 23 3-11 10-19 19-23 3 17-4 36-19 42C17 48 10 29 13 12Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M25 20c1 7 3 13 7 18 4-5 6-11 7-18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-flame" viewBox="0 0 64 64">
+      <path d="M34 5c2 12 13 16 13 29a15 15 0 0 1-30 0c0-8 5-13 9-18 2 7 5 9 8 11 3-7 2-15 0-22Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M32 30c-4 5-7 8-7 13a7 7 0 0 0 14 0c0-5-3-8-7-13Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    </symbol>
+    <symbol id="icon-eye" viewBox="0 0 64 64">
+      <path d="M5 32s10-16 27-16 27 16 27 16-10 16-27 16S5 32 5 32Z" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="32" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="32" cy="32" r="2.5" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-soul" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="3"/>
+      <path d="M32 6v8m0 36v8M6 32h8m36 0h8M14 14l6 6m24 24 6 6M50 14l-6 6M20 44l-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-pause" viewBox="0 0 64 64">
+      <path d="M22 14v36M42 14v36" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-sound" viewBox="0 0 64 64">
+      <path d="M10 25h10l13-11v36L20 39H10V25Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M41 24c4 4 4 12 0 16m6-22c8 8 8 20 0 28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-motion" viewBox="0 0 64 64">
+      <rect x="20" y="7" width="24" height="50" rx="5" fill="none" stroke="currentColor" stroke-width="3"/>
+      <path d="M28 49h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="M9 24c-3 5-3 11 0 16M55 24c3 5 3 11 0 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <canvas id="game" aria-label="Gate of Embers game arena"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="damage-flash" aria-hidden="true"></div>
+  <div id="vignette" aria-hidden="true"></div>
+
+  <main id="title-screen" class="screen">
+    <div class="title-inner">
+      <p class="eyebrow">A HADES-STYLE ROOM-CLEARING ROGUELITE</p>
+      <h1 class="game-title"><span>GATE</span><em>of</em><span>EMBERS</span></h1>
+      <p class="tagline">Three arms. One gate. No mercy.</p>
+
+      <div class="weapon-grid" role="radiogroup" aria-label="Choose a weapon">
+        <button class="weapon-card is-selected" data-weapon="blade" role="radio" aria-checked="true">
+          <span class="weapon-icon"><svg><use href="#icon-blade"></use></svg></span>
+          <span class="weapon-name">Stygian Blade</span>
+          <span class="weapon-kind">Sword</span>
+          <span class="weapon-bar"><i style="--v:.5"></i><i style="--v:.86"></i><i style="--v:.38"></i></span>
+        </button>
+        <button class="weapon-card" data-weapon="bow" role="radio" aria-checked="false">
+          <span class="weapon-icon"><svg><use href="#icon-bow"></use></svg></span>
+          <span class="weapon-name">Heart-Seeker</span>
+          <span class="weapon-kind">Bow</span>
+          <span class="weapon-bar"><i style="--v:.64"></i><i style="--v:.58"></i><i style="--v:.9"></i></span>
+        </button>
+        <button class="weapon-card" data-weapon="shield" role="radio" aria-checked="false">
+          <span class="weapon-icon"><svg><use href="#icon-shield"></use></svg></span>
+          <span class="weapon-name">Chaos Aegis</span>
+          <span class="weapon-kind">Shield</span>
+          <span class="weapon-bar"><i style="--v:.38"></i><i style="--v:.74"></i><i style="--v:.52"></i></span>
+        </button>
+      </div>
+
+      <div class="weapon-detail">
+        <p id="weapon-desc">A cursed edge that drinks the dark. Sweeping strikes, and a whirlwind that clears the room.</p>
+        <p class="weapon-special" id="weapon-special">SPECIAL · WHIRLWIND</p>
+      </div>
+
+      <div class="title-options">
+        <button id="tilt-toggle" class="toggle" role="switch" aria-checked="false">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label"><svg><use href="#icon-motion"></use></svg>Tilt controls</span>
+        </button>
+        <button id="sound-toggle" class="toggle" role="switch" aria-checked="true">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label"><svg><use href="#icon-sound"></use></svg>Sound</span>
+        </button>
+      </div>
+      <p id="motion-status" class="motion-status" aria-live="polite">Optional tilt steering for phone and tablet. iOS asks for motion permission.</p>
+
+      <button id="start-btn" class="btn-primary" aria-label="Start Game"><span>START RUN</span><small>Enter</small></button>
+      <p class="best-line" id="best-line"></p>
+      <p class="how-line">Left thumb moves · Right thumb strikes, dashes, and unleashes</p>
+    </div>
+  </main>
+
+  <section id="hud" class="hidden" aria-label="Game status">
+    <div class="hud-left">
+      <div class="hp-row">
+        <span class="hud-weapon" id="hud-weapon"><svg><use href="#icon-blade"></use></svg></span>
+        <div class="hp-shell">
+          <div class="hp-fill" id="hp-fill"></div>
+          <div class="hp-ticks" aria-hidden="true"></div>
+          <span class="hp-text" id="hp-text">100 / 100</span>
+        </div>
+      </div>
+      <div class="meter-row">
+        <div class="dash-pips" id="dash-pips" aria-label="Dash charges"></div>
+        <div class="special-shell" aria-label="Special charge">
+          <div class="special-fill" id="special-fill"></div>
+          <span class="special-label">SPECIAL</span>
+        </div>
+      </div>
+    </div>
+    <div class="hud-center">
+      <p class="room-name" id="room-name">THE ASHEN VESTIBULE</p>
+      <p class="wave-text" id="wave-text">WAVE 1 / 2</p>
+      <div class="boss-shell hidden" id="boss-shell">
+        <div class="boss-fill" id="boss-fill"></div>
+        <span class="boss-name" id="boss-name">THE GATE WARDEN</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="souls" id="souls"><svg><use href="#icon-soul"></use></svg><span id="souls-value">0</span></div>
+      <button id="pause-btn" class="icon-btn" aria-label="Pause game"><svg><use href="#icon-pause"></use></svg></button>
+    </div>
+  </section>
+
+  <div id="touch-ui" class="hidden" aria-label="Touch controls">
+    <div id="stick-zone" aria-label="Movement joystick">
+      <div id="stick-base"><div id="stick-ring"></div><div id="stick-knob"></div></div>
+      <p class="stick-hint">MOVE</p>
+    </div>
+    <div class="action-cluster">
+      <button id="special-btn" class="action-btn special-btn" aria-label="Weapon special">
+        <span class="action-glyph">✦</span><span class="action-label">SPECIAL</span>
+      </button>
+      <button id="dash-btn" class="action-btn dash-btn" aria-label="Dash">
+        <span class="action-glyph">»</span><span class="action-label">DASH</span>
+      </button>
+      <button id="attack-btn" class="action-btn attack-btn" aria-label="Attack">
+        <span class="action-glyph">⚔</span><span class="action-label">ATTACK</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="pause-overlay" class="overlay hidden">
+    <div class="panel pause-panel">
+      <p class="eyebrow">THE GATE WAITS</p>
+      <h2>PAUSED</h2>
+      <div class="panel-actions">
+        <button id="resume-btn" class="btn-primary">RESUME</button>
+        <button id="restart-btn" class="btn-secondary">RESTART RUN</button>
+        <button id="quit-btn" class="btn-ghost">RETURN TO GATE</button>
+      </div>
+      <p class="pause-note" id="pause-note">Tip: dash through attacks. You are invulnerable mid-dash.</p>
+    </div>
+  </div>
+
+  <div id="reward-overlay" class="overlay hidden">
+    <div class="panel reward-panel">
+      <p class="eyebrow" id="reward-kicker">ROOM CLEARED</p>
+      <h2 id="reward-title">CHOOSE A BOON</h2>
+      <p class="reward-sub" id="reward-sub">The dark offers power. Take one.</p>
+      <div class="boon-grid" id="boon-grid"></div>
+      <p class="reward-souls" id="reward-souls"></p>
+    </div>
+  </div>
+
+  <div id="end-overlay" class="overlay hidden">
+    <div class="panel end-panel">
+      <p class="eyebrow" id="end-kicker">THE GATE CLAIMS YOU</p>
+      <h2 id="end-title">YOU FELL</h2>
+      <p class="end-sub" id="end-sub">The embers remember every attempt.</p>
+      <div class="end-stats" id="end-stats"></div>
+      <div class="panel-actions">
+        <button id="again-btn" class="btn-primary">TRY AGAIN</button>
+        <button id="end-quit-btn" class="btn-ghost">RETURN TO GATE</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fade" aria-hidden="true"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
